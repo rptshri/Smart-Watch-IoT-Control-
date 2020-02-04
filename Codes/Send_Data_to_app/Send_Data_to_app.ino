@@ -1,23 +1,22 @@
-#include <SoftwareSerial.h>
-#include <EasyButton.h>
+#include <SoftwareSerial.h>     //include SoftwareSerial library
+#include <EasyButton.h>         //include Button library
 
-SoftwareSerial bt(2, 3); /* (Rx,Tx) */
+SoftwareSerial bt(2, 3); /* (Rx,Tx) */   //create object instance for class SoftwareSerial along with dedicated rx and tx pin no's
 
-#define BUTTON_1_PIN 4
+#define BUTTON_1_PIN 4      //define pin no's for buttons
 #define BUTTON_2_PIN 5
 #define BUTTON_3_PIN 6
 #define BUTTON_4_PIN 7
 
-EasyButton buttonOne(BUTTON_1_PIN);
+EasyButton buttonOne(BUTTON_1_PIN);   //create object instance for every button from parent class along passing the button pin no
 EasyButton buttonTwo(BUTTON_2_PIN);
 EasyButton buttonThree(BUTTON_3_PIN);
 EasyButton buttonFour(BUTTON_4_PIN);
 
-char swstatus = '0';
+char switch_status = '0';
 int temp = 0;
-//char senddata = '0';
 
-void sendble();
+void sendToApp();     //function Declaration
 
 void setup() {
   bt.begin(9600); /* Define baud rate for software serial communication */
@@ -33,44 +32,42 @@ void setup() {
 }
 
 void loop() {
-
+  //check for button read one by one
   if (buttonOne.read())
   {
     Serial.println("Button 1 pressed");
-    swstatus  = '1';
-    sendble();
+    switch_status  = '1';      //update the switch status
+    sendToApp();                 //call the data send to app function
   }
   else if (buttonTwo.read())
   {
     Serial.println("Button 2 pressed");
-    swstatus  = '2';
-    sendble();
+    switch_status  = '2';
+    sendToApp();
   }
   else if (buttonThree.read())
   {
     Serial.println("Button 3 pressed");
-    swstatus  = '3';
-    sendble();
+    switch_status  = '3';
+    sendToApp();
   }
   else if (buttonFour.read())
   {
     Serial.println("Button 4 pressed");
-    swstatus = '4';
-    sendble();
+    switch_status = '4';
+    sendToApp();
   }
 }
 
-void sendble()
+void sendToApp()    //function Declaration
 {
-  if (swstatus != temp)     //condition to make sure that data is sent only once when button is present
+  if (switch_status != temp)     //condition to make sure that data is sent only once when button is present
   {
     Serial.print("Sending::  ");
-    bt.write(swstatus);
+    bt.write(switch_status);      //send the switch status over Bluetooth
     bt.write("\n");     //for new line feed after every data send
-    temp = swstatus;
-    Serial.println(swstatus);
+    temp = switch_status;
+    Serial.println(switch_status);
     Serial.println("-------------");
-
   }
-
 }
