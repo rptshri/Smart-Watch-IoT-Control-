@@ -25,8 +25,8 @@ int temp1 = 0;
 void sendToApp();     //function Declaration
 
 void setup() {
-  bt.begin(9600); /* Define baud rate for software serial communication */
-  Serial.begin(9600); /* Define baud rate for serial communication */
+  bt.begin(4800); /* Define baud rate for software serial communication */
+  Serial.begin(4800); /* Define baud rate for serial communication */
   pinMode(BUTTON_1_PIN, INPUT_PULLUP);
   pinMode(BUTTON_2_PIN, INPUT_PULLUP);
   pinMode(BUTTON_3_PIN, INPUT_PULLUP);
@@ -108,7 +108,7 @@ void loop() {
     sendToApp();
     digitalWrite(13, HIGH);
   }
-  delay(500);
+  delay(1000);
   digitalWrite(13, LOW);
 
 }
@@ -117,10 +117,10 @@ void sendToApp()    //function Declaration
 {
   if (switch_status != temp || state_all != temp1)     //condition to make sure that data is sent only once when button is present
   {
-    Serial.print("Sending::  ");
+    //    Serial.print("Sending::  ");
     bt.write(switch_status);      //send the switch status over Bluetooth
     bt.write(state_all);
-    bt.write("\n");     //for new line feed after every data send
+    //    bt.write("\n");     //for new line feed after every data send
     temp = switch_status;
     temp1 = state_all;
     Serial.print(switch_status);
